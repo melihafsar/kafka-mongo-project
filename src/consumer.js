@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const { inspect } = require('util');
 
 async function run() {
-  const client = new MongoClient('mongodb://172.18.0.7');
+  const client = new MongoClient('mongodb://localhost:35001');
   await client.connect();
   console.log('Connected successfully to server');
   

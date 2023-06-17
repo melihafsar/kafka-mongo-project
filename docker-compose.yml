@@ -5,7 +5,7 @@ services:
     hostname: zookeeper
     container_name: zookeeper
     networks:
-      - localnet
+      - mongo-kafka_localnet
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -17,7 +17,7 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - localnet
+      - mongo-kafka_localnet
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
@@ -42,7 +42,7 @@ services:
       - zookeeper
       - broker
     networks:
-      - localnet
+      - mongo-kafka_localnet
     environment:
       KAFKA_JMX_PORT: 35000
       KAFKA_JMX_HOSTNAME: localhost
@@ -74,7 +74,7 @@ services:
     hostname: rest-proxy
     container_name: rest-proxy
     networks:
-      - localnet
+      - mongo-kafka_localnet
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: "broker:29092"
@@ -88,7 +88,7 @@ services:
     depends_on:
       - broker
     networks:
-      - localnet
+      - mongo-kafka_localnet
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "broker:29092"
@@ -109,27 +109,46 @@ services:
       - broker
       - connect
     networks:
-      - localnet
+      - mongo-kafka_localnet
     restart: always
 
   mongo1-setup:
     image: "mongodb-kafka-base-setup-mongod:1.0"
     container_name: mongo1-setup
-    build:
-      context: .
-      dockerfile: mongo.Dockerfile
     depends_on:
       - mongo1
     networks:
-      - localnet
+      - mongo-kafka_localnet
     entrypoint:
       [
-        "bash",
+        "sh",
         "-c",
         "sleep 10 && mongosh --host mongo1:27017 config-replica.js && sleep 10",
       ]
     restart: "no"
 
+  consumer:
+      container_name: consumer
+      build:
+        context: .
+        dockerfile: consumer.Dockerfile
+      depends_on:
+        - mongo1
+      networks:
+        - mongo-kafka_localnet
+      restart: "no"
+
+  producer:
+      container_name: producer
+      build:
+        context: .
+        dockerfile: producer.Dockerfile
+      depends_on:
+        - mongo1
+      networks:
+        - mongo-kafka_localnet
+      restart: "no"
+
 networks:
-  localnet:
+  mongo-kafka_localnet:
     attachable: true

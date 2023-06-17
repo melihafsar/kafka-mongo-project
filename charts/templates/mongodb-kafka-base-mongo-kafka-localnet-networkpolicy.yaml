@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: mongodb-kafka-base-mongo-kafka-localnet
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/mongodb-kafka-base-mongo-kafka-localnet: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/mongodb-kafka-base-mongo-kafka-localnet: "true"
