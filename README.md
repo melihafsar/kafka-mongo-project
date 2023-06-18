@@ -1,52 +1,36 @@
-# MongoDB Connector for Apache Kafka Tutorials
+MongoDB-Kafka-Node.js with Docker Compose
 
-The official MongoDB Connector for Apache® Kafka® is developed and supported by MongoDB engineers and verified by Confluent. The Connector is designed to be used with Kafka Connect and enables MongoDB to be a datasource for Apache Kafka from both a source and sink perspective.
+This is a node.js application that uses Kafka and MongoDB to process data.
 
-![](https://webassets.mongodb.com/_com_assets/cms/mongodbkafka-hblts5yy33.png)
+Creating and Running the Containers
 
-These tutorials are focused on teaching you the essential features and functionality of the connector enabling you to get up and running quickly.
+Follow the steps below to create and run the containers:
 
-# Prerequisites
+1. Clone the repository to your local machine.
+2. Navigate to the root directory of the repository.
+3. Run the following command to build the containers:
+   ```
+   docker-compose build
+   ```
+4. Run the following command to start the containers:
+   ```
+   docker-compose up
+   ```
+This command will start the Kafka and MongoDB containers and run the consumer and producer containers.
 
-The MongoDB Kafka tutorial environment requires the following installed on your client:
+The producer container will generate data and send it to the Kafka topic. The consumer container will consume the data from the Kafka topic and store it in the MongoDB database.
 
-- [Docker](https://docs.docker.com/get-docker/)
-- [Git]()
-
-The docker compose in this repository will create an environment that consists of the following:
-
-- Apache Kafka
-- Zookeeper
-- Apache Kafka Connect
-- MongoDB Connector for Apache Kafka (installed in Kafka Connect)
-- MongoDB single node replica set
-
-# Starting the Docker environment
-
-To start the baseline tutorial environment execute the run the following command:
+To view the data in the MongoDB database, you can connect to the mongo1 container and run the mongo command-line tool.
 
 ```
-docker-compose -p mongo-kafka up -d --force-recreate
+docker exec -it mongo1 mongo
 ```
 
-To start an interactive shell, run the following command:
+This will open the MongoDB shell and provide an environment where you can run commands to view the data.
 
-```
-docker exec -it mongo1 /bin/bash
-```
+---------------------
 
-## Shutting down the Tutorial environment
+### Dockerhub image links
 
-To stop and remove the Docker environment from your
-machine, run the following command:
-
-```
-docker-compose -p mongo-kafka down --rmi 'all'
-```
-
-## References
-
-- [MongoDB Kafka Connector](https://docs.mongodb.com/kafka-connector/current/) online documentation.
-
-- [Connectors to Kafka](https://docs.confluent.io/home/connect/overview.html)
-- MongoDB Connector for Apache Kafka Tutorials (Link TBD)
+- [producer](https://hub.docker.com/repository/docker/melihafsar/mongo-kafka-project-producer)
+- [consumer](https://hub.docker.com/repository/docker/melihafsar/mongo-kafka-project-consumer)
